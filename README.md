@@ -1,4 +1,4 @@
-# powerball
+# Sample Powerball Picker
 
 ## Project setup
 ```
