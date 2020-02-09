@@ -7,19 +7,24 @@
       <div class="powerball">
         {{powerball ? powerball : 'PB'}}
       </div>
-      <div @click="autofill()"><i class="fas fa-bolt"></i></div>
-      <div @click="clear()"><i class="fas fa-trash-alt"></i></div>
+      <div @click="autofill()">
+        <font-awesome-icon icon="bolt" />
+        <i class="fas fa-bolt"></i>
+      </div>
+      <div @click="clear()">
+        <font-awesome-icon icon="trash-alt" />
+      </div>
     </div>
     <div class="picker">
       <div v-for="index in 35" :key="index+10" @click="select(index)">
-        {{selection.indexOf(index) >= 0 ? 'X': ''}}
+        <font-awesome-icon v-if="selection.indexOf(index) >= 0" icon="times" />
         {{index}}
       </div>
     </div>
     <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
     <div class="picker">
       <div v-for="index in 20" :key="index+50" @click="powerball=index">
-        {{powerball==index?'X':''}}
+        <font-awesome-icon v-if="powerball == index" icon="times" />
         {{index}} <i class="fas fa-times"></i>
       </div>
     </div>
@@ -34,8 +39,8 @@ export default Vue.extend({
   name: "Powerball",
   data: function() {
     return { 
-      selection: [ 27, 3, 32 ],
-      powerball: 11
+      selection: [],
+      powerball: 0
     }
   },
   methods: {
@@ -48,18 +53,16 @@ export default Vue.extend({
       this.powerball = 0;
     },
     autofill() {
-      this.selection = [1, 2, 3, 4, 5, 6, 7];
-      this.powerball = 8;
       var body = {
         "CompanyId": "GoldenCasket",
         "MaxDrawCountPerProduct": 1,
         "OptionalProductFilter": ["Powerball"]
       };
-      var result = axios.post('https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults', body)
+      var result = axios
+        .post('https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults', body)
         .then(response => { 
           this.selection = response.data.DrawResults[0].PrimaryNumbers;
           this.powerball = response.data.DrawResults[0].SecondaryNumbers[0];
-          console.log(response); 
         })
         .catch(error => {});
     }
