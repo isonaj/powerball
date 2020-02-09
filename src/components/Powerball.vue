@@ -1,29 +1,29 @@
 <template>
   <div class="container">
     <div class="card">
-      <div v-for="index in 7" :key="index">
+      <div v-for="index in 7" :key="index" :class="{selecting: index-1==selection.length, selected: index-1<selection.length}">
         {{selection[index-1]}}
       </div>
       <div class="powerball">
         {{powerball ? powerball : 'PB'}}
       </div>
-      <div @click="autofill()">
+      <div @click="autofill()" style="background-color: #6c4498">
         <font-awesome-icon icon="bolt" />
         <i class="fas fa-bolt"></i>
       </div>
-      <div @click="clear()">
+      <div @click="clear()" style="background-color: #767676">
         <font-awesome-icon icon="trash-alt" />
       </div>
     </div>
     <div class="picker">
-      <div v-for="index in 35" :key="index+10" @click="select(index)">
+      <div v-for="index in 35" :key="index+10" @click="select(index)" :class="{selected: selection.indexOf(index) >= 0}">
         <font-awesome-icon v-if="selection.indexOf(index) >= 0" icon="times" />
         {{index}}
       </div>
     </div>
     <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
     <div class="picker">
-      <div v-for="index in 20" :key="index+50" @click="powerball=index">
+      <div v-for="index in 20" :key="index+50" @click="powerball=index" :class="{selected: index == powerball}">
         <font-awesome-icon v-if="powerball == index" icon="times" />
         {{index}} <i class="fas fa-times"></i>
       </div>
@@ -87,12 +87,21 @@ export default Vue.extend({
   display: inline-block;
   box-sizing: border-box;
   color: white;
-  background-color: #3450a7;
-  border: 1px solid #3450a7;
+  background-color: white;
+  border: 1px solid grey;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   margin-right: 4px;
+  /*box-shadow: 5px 5px 5px grey;*/
+  /*filter: drop-shadow(3px 3px 4px #444444);*/
+}
+.card div.selecting {
+  border: 1px solid #3450a7;
+}
+.card div.selected {
+  background-color: #3450a7;
+  border: 1px solid #3450a7;
 }
 .card div.powerball {
   background-color: #889bab;
@@ -114,5 +123,8 @@ export default Vue.extend({
   border: 1px solid #889bab;
   flex: 0 0 40px;
   height: 40px;
+}
+.picker div.selected {
+  background-color: #e9e4f1;
 }
 </style>
