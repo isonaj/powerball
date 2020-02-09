@@ -28,6 +28,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import axios from "axios";
 
 export default Vue.extend({
   name: "Powerball",
@@ -49,6 +50,18 @@ export default Vue.extend({
     autofill() {
       this.selection = [1, 2, 3, 4, 5, 6, 7];
       this.powerball = 8;
+      var body = {
+        "CompanyId": "GoldenCasket",
+        "MaxDrawCountPerProduct": 1,
+        "OptionalProductFilter": ["Powerball"]
+      };
+      var result = axios.post('https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults', body)
+        .then(response => { 
+          this.selection = response.data.DrawResults[0].PrimaryNumbers;
+          this.powerball = response.data.DrawResults[0].SecondaryNumbers[0];
+          console.log(response); 
+        })
+        .catch(error => {});
     }
   }
 });
