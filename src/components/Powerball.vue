@@ -4,7 +4,7 @@
       <div v-for="index in 7" :key="index" :class="{selecting: index-1==selection.length, selected: index-1<selection.length}">
         {{selection[index-1]}}
       </div>
-      <div class="powerball">
+      <div class="powerball" :class="{selected: powerball}">
         {{powerball ? powerball : 'PB'}}
       </div>
       <div @click="autofill()" style="background-color: #6c4498">
@@ -17,14 +17,14 @@
     </div>
     <div class="picker">
       <div v-for="index in 35" :key="index+10" @click="select(index)" :class="{selected: selection.indexOf(index) >= 0}">
-        <font-awesome-icon v-if="selection.indexOf(index) >= 0" icon="times" />
+        <font-awesome-icon v-if="selection.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
         {{index}}
       </div>
     </div>
     <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
     <div class="picker">
       <div v-for="index in 20" :key="index+50" @click="powerball=index" :class="{selected: index == powerball}">
-        <font-awesome-icon v-if="powerball == index" icon="times" />
+        <font-awesome-icon v-if="powerball == index" icon="times" style="color: #d6cde4" />
         {{index}} <i class="fas fa-times"></i>
       </div>
     </div>
@@ -88,11 +88,12 @@ export default Vue.extend({
   box-sizing: border-box;
   color: white;
   background-color: white;
-  border: 1px solid grey;
+  border: 1px solid #d3d3d3;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   margin-right: 4px;
+  font-weight: bolder;
   /*box-shadow: 5px 5px 5px grey;*/
   /*filter: drop-shadow(3px 3px 4px #444444);*/
 }
@@ -104,6 +105,10 @@ export default Vue.extend({
   border: 1px solid #3450a7;
 }
 .card div.powerball {
+  color: #494949;
+}
+.card div.powerball.selected {
+  color: white;
   background-color: #889bab;
   border: 1px solid #889bab;
 }
