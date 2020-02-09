@@ -1,17 +1,27 @@
 <template>
   <div class="container">
     <div class="card">
-      <div v-for="index in 7" :key="index"><span>{{index}}</span></div>
-      <div class="powerball">PB</div>
-      <div><i class="fas fa-bolt"></i></div>
-      <div><i class="fas fa-trash-alt"></i></div>
+      <div v-for="index in 7" :key="index">
+        {{selection[index-1]}}
+      </div>
+      <div class="powerball">
+        {{powerball ? powerball : 'PB'}}
+      </div>
+      <div @click="autofill()"><i class="fas fa-bolt"></i></div>
+      <div @click="clear()"><i class="fas fa-trash-alt"></i></div>
     </div>
     <div class="picker">
-      <div v-for="index in 35" :key="index+10"><span>{{index}} <i class="fas fa-times"></i></span></div>
+      <div v-for="index in 35" :key="index+10" @click="select(index)">
+        {{selection.indexOf(index) >= 0 ? 'X': ''}}
+        {{index}}
+      </div>
     </div>
     <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
     <div class="picker">
-      <div v-for="index in 20" :key="index+50"><span>{{index}} <i class="fas fa-times"></i></span></div>
+      <div v-for="index in 20" :key="index+50" @click="powerball=index">
+        {{powerball==index?'X':''}}
+        {{index}} <i class="fas fa-times"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -20,7 +30,27 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "Powerball"
+  name: "Powerball",
+  data: function() {
+    return { 
+      selection: [ 27, 3, 32 ],
+      powerball: 11
+    }
+  },
+  methods: {
+    select(number: number) {
+      if (this.selection.length < 7 && this.selection.indexOf(number) == -1)
+        this.selection.push(number);
+    },
+    clear() {
+      this.selection = [];
+      this.powerball = 0;
+    },
+    autofill() {
+      this.selection = [1, 2, 3, 4, 5, 6, 7];
+      this.powerball = 8;
+    }
+  }
 });
 </script>
 
