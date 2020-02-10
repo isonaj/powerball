@@ -12,13 +12,13 @@
         {{ primaryNumbers[index - 1] }}
       </div>
       <div class="powerball" :class="{ selected: secondaryNumbers[0] }">
-        {{ secondaryNumbers[0] ? secondaryNumbers[0] : 'PB' }}
+        {{ secondaryNumbers[0] ? secondaryNumbers[0] : "PB" }}
       </div>
-      <div @click="autofill()" style="background-color: #6c4498">
+      <div class="autoFill" @click="autofill()">
         <font-awesome-icon icon="bolt" />
         <i class="fas fa-bolt"></i>
       </div>
-      <div @click="clearSelection()" style="background-color: #767676">
+      <div class="clearSelection" @click="clearSelection()">
         <font-awesome-icon icon="trash-alt" />
       </div>
     </div>
@@ -37,7 +37,7 @@
         {{ index }}
       </div>
     </div>
-    <div style="color: white; background-color: #889bab; font-size:0.8em">
+    <div class="selectPowerball">
       SELECT YOUR POWERBALL
     </div>
     <div class="picker">
@@ -66,24 +66,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { mapState } from 'vuex';
+import Vue from "vue";
+import { mapState } from "vuex";
 
 export default Vue.extend({
-  name: 'Powerball',
-  computed: mapState(['primaryNumbers', 'secondaryNumbers']),
+  name: "Powerball",
+  computed: mapState(["primaryNumbers", "secondaryNumbers"]),
   methods: {
     selectPrimary(value: number) {
-      this.$store.dispatch('selectPrimary', value);
+      this.$store.dispatch("selectPrimary", value);
     },
     selectSecondary(value: number) {
-      this.$store.dispatch('selectSecondary', value);
+      this.$store.dispatch("selectSecondary", value);
     },
     clearSelection() {
-      this.$store.dispatch('clearSelection');
+      this.$store.dispatch("clearSelection");
     },
     autofill() {
-      this.$store.dispatch('autoFill');
+      this.$store.dispatch("autoFill");
     }
   }
 });
@@ -150,5 +150,16 @@ export default Vue.extend({
 }
 .picker div.selected {
   background-color: #e9e4f1;
+}
+.autoFill {
+  background-color: #6c4498;
+}
+.clearSelection {
+  background-color: #767676;
+}
+.selectPowerball {
+  color: white;
+  background-color: #889bab;
+  font-size: 0.8em;
 }
 </style>
