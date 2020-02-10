@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import LottService from 'src/services/LottService';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    primaryNumbers: [1, 2, 3],
-    secondaryNumbers: []
+    primaryNumbers: <number[]>[],
+    secondaryNumbers: <number[]>[]
   },
   mutations: {
     SELECT_PRIMARY(state, value: number) {
@@ -46,16 +47,7 @@ export default new Vuex.Store({
       }
     },
     autoFill({ commit }) {
-      var body = {
-        CompanyId: 'GoldenCasket',
-        MaxDrawCountPerProduct: 1,
-        OptionalProductFilter: ['Powerball']
-      };
-      var result = axios
-        .post(
-          'https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults',
-          body
-        )
+      LottService.getLatestResults()
         .then(response => {
           commit('SET_SELECTION', {
             primaryNumbers: response.data.DrawResults[0].PrimaryNumbers,
