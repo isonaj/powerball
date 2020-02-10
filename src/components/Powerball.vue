@@ -1,30 +1,30 @@
 <template>
   <div class="container">
     <div class="card">
-      <div v-for="index in 7" :key="index" :class="{selecting: index-1==selection.length, selected: index-1<selection.length}">
-        {{selection[index-1]}}
+      <div v-for="index in 7" :key="index" :class="{selecting: index-1==primaryNumbers.length, selected: index-1<primaryNumbers.length}">
+        {{primaryNumbers[index-1]}}
       </div>
-      <div class="powerball" :class="{selected: powerball}">
-        {{powerball ? powerball : 'PB'}}
+      <div class="powerball" :class="{selected: secondaryNumbers[0]}">
+        {{secondaryNumbers[0] ? secondaryNumbers[0] : 'PB'}}
       </div>
       <div @click="autofill()" style="background-color: #6c4498">
         <font-awesome-icon icon="bolt" />
         <i class="fas fa-bolt"></i>
       </div>
-      <div @click="clear()" style="background-color: #767676">
+      <div @click="clearSelection()" style="background-color: #767676">
         <font-awesome-icon icon="trash-alt" />
       </div>
     </div>
     <div class="picker">
-      <div v-for="index in 35" :key="index+10" @click="select(index)" :class="{selected: selection.indexOf(index) >= 0}">
-        <font-awesome-icon v-if="selection.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
+      <div v-for="index in 35" :key="index+10" @click="selectPrimary(index)" :class="{selected: primaryNumbers.indexOf(index) >= 0}">
+        <font-awesome-icon v-if="primaryNumbers.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
         {{index}}
       </div>
     </div>
     <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
     <div class="picker">
-      <div v-for="index in 20" :key="index+50" @click="powerball=index" :class="{selected: index == powerball}">
-        <font-awesome-icon v-if="powerball == index" icon="times" style="color: #d6cde4" />
+      <div v-for="index in 20" :key="index+50" @click="selectSecondary(index)" :class="{selected: secondaryNumbers.indexOf(index) >= 0}">
+        <font-awesome-icon v-if="secondaryNumbers.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
         {{index}} <i class="fas fa-times"></i>
       </div>
     </div>
@@ -33,38 +33,23 @@
 
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
+import { mapState } from "vuex";
 
 export default Vue.extend({
   name: "Powerball",
-  data: function() {
-    return { 
-      selection: [],
-      powerball: 0
-    }
-  },
+  computed: mapState(['primaryNumbers', 'secondaryNumbers']),
   methods: {
-    select(number: number) {
-      if (this.selection.length < 7 && this.selection.indexOf(number) == -1)
-        this.selection.push(number);
+    selectPrimary(value: number) {
+      this.$store.dispatch('selectPrimary', value);
     },
-    clear() {
-      this.selection = [];
-      this.powerball = 0;
+    selectSecondary(value: number) {
+      this.$store.dispatch('selectSecondary', value);
+    },
+    clearSelection() {
+      this.$store.dispatch('clearSelection');
     },
     autofill() {
-      var body = {
-        "CompanyId": "GoldenCasket",
-        "MaxDrawCountPerProduct": 1,
-        "OptionalProductFilter": ["Powerball"]
-      };
-      var result = axios
-        .post('https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults', body)
-        .then(response => { 
-          this.selection = response.data.DrawResults[0].PrimaryNumbers;
-          this.powerball = response.data.DrawResults[0].SecondaryNumbers[0];
-        })
-        .catch(error => {});
+      this.$store.dispatch('autoFill');
     }
   }
 });
