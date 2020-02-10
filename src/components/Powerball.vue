@@ -1,11 +1,18 @@
 <template>
   <div class="container">
     <div class="card">
-      <div v-for="index in 7" :key="index" :class="{selecting: index-1==primaryNumbers.length, selected: index-1<primaryNumbers.length}">
-        {{primaryNumbers[index-1]}}
+      <div
+        v-for="index in 7"
+        :key="index"
+        :class="{
+          selecting: index - 1 == primaryNumbers.length,
+          selected: index - 1 < primaryNumbers.length
+        }"
+      >
+        {{ primaryNumbers[index - 1] }}
       </div>
-      <div class="powerball" :class="{selected: secondaryNumbers[0]}">
-        {{secondaryNumbers[0] ? secondaryNumbers[0] : 'PB'}}
+      <div class="powerball" :class="{ selected: secondaryNumbers[0] }">
+        {{ secondaryNumbers[0] ? secondaryNumbers[0] : 'PB' }}
       </div>
       <div @click="autofill()" style="background-color: #6c4498">
         <font-awesome-icon icon="bolt" />
@@ -16,27 +23,52 @@
       </div>
     </div>
     <div class="picker">
-      <div v-for="index in 35" :key="index+10" @click="selectPrimary(index)" :class="{selected: primaryNumbers.indexOf(index) >= 0}">
-        <font-awesome-icon v-if="primaryNumbers.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
-        {{index}}
+      <div
+        v-for="index in 35"
+        :key="index + 10"
+        @click="selectPrimary(index)"
+        :class="{ selected: primaryNumbers.indexOf(index) >= 0 }"
+      >
+        <font-awesome-icon
+          v-if="primaryNumbers.indexOf(index) >= 0"
+          icon="times"
+          style="color: #d6cde4"
+        />
+        {{ index }}
       </div>
     </div>
-    <div style="color: white; background-color: #889bab; font-size:0.8em">SELECT YOUR POWERBALL</div>
+    <div style="color: white; background-color: #889bab; font-size:0.8em">
+      SELECT YOUR POWERBALL
+    </div>
     <div class="picker">
-      <div v-for="index in 20" :key="index+50" @click="selectSecondary(index)" :class="{selected: secondaryNumbers.indexOf(index) >= 0}">
-        <font-awesome-icon v-if="secondaryNumbers.indexOf(index) >= 0" icon="times" style="color: #d6cde4" />
-        {{index}} <i class="fas fa-times"></i>
+      <div
+        v-for="index in 20"
+        :key="index + 50"
+        @click="selectSecondary(index)"
+        :class="{ selected: secondaryNumbers.indexOf(index) >= 0 }"
+      >
+        <font-awesome-icon
+          v-if="secondaryNumbers.indexOf(index) >= 0"
+          icon="times"
+          style="color: #d6cde4"
+        />
+        {{ index }} <i class="fas fa-times"></i>
       </div>
     </div>
+    <v-container>
+      <v-row>
+        <v-col> </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { mapState } from "vuex";
+import Vue from 'vue';
+import { mapState } from 'vuex';
 
 export default Vue.extend({
-  name: "Powerball",
+  name: 'Powerball',
   computed: mapState(['primaryNumbers', 'secondaryNumbers']),
   methods: {
     selectPrimary(value: number) {

@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.primaryNumbers = [];
       state.secondaryNumbers = [];
     },
-    SET_SELECTION(state, {primaryNumbers, secondaryNumbers}) {
+    SET_SELECTION(state, { primaryNumbers, secondaryNumbers }) {
       state.primaryNumbers = primaryNumbers;
       state.secondaryNumbers = secondaryNumbers;
     }
@@ -29,33 +29,42 @@ export default new Vuex.Store({
     clearSelection({ state, commit }) {
       commit('SET_SELECTION', { primaryNumbers: [], secondaryNumbers: [] });
     },
-    selectPrimary({state, commit}, value: number) {
-      if (this.state.primaryNumbers.length < 7 && this.state.primaryNumbers.indexOf(value) == -1)
-      {
+    selectPrimary({ state, commit }, value: number) {
+      if (
+        this.state.primaryNumbers.length < 7 &&
+        this.state.primaryNumbers.indexOf(value) == -1
+      ) {
         commit('SELECT_PRIMARY', value);
       }
     },
-    selectSecondary({state, commit}, value: number) {
-      if (this.state.secondaryNumbers.length < 1 && this.state.secondaryNumbers.indexOf(value) == -1)
-      {
+    selectSecondary({ state, commit }, value: number) {
+      if (
+        this.state.secondaryNumbers.length < 1 &&
+        this.state.secondaryNumbers.indexOf(value) == -1
+      ) {
         commit('SELECT_SECONDARY', value);
       }
     },
     autoFill({ commit }) {
       var body = {
-        "CompanyId": "GoldenCasket",
-        "MaxDrawCountPerProduct": 1,
-        "OptionalProductFilter": ["Powerball"]
+        CompanyId: 'GoldenCasket',
+        MaxDrawCountPerProduct: 1,
+        OptionalProductFilter: ['Powerball']
       };
       var result = axios
-        .post('https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults', body)
-        .then(response => { 
+        .post(
+          'https://data.api.thelott.com/sales/vmax/web/data/lotto/latestresults',
+          body
+        )
+        .then(response => {
           commit('SET_SELECTION', {
             primaryNumbers: response.data.DrawResults[0].PrimaryNumbers,
             secondaryNumbers: response.data.DrawResults[0].SecondaryNumbers
           });
         })
-        .catch(error => { console.log('ERROR!') });
+        .catch(error => {
+          console.log('ERROR!');
+        });
     }
   },
   modules: {}
