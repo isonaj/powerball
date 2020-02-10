@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
-import LottService from 'src/services/LottService';
+import LottService from '@/services/LottService';
 
 Vue.use(Vuex);
 
@@ -33,7 +32,8 @@ export default new Vuex.Store({
     selectPrimary({ state, commit }, value: number) {
       if (
         this.state.primaryNumbers.length < 7 &&
-        this.state.primaryNumbers.indexOf(value) == -1
+        this.state.primaryNumbers.indexOf(value) == -1 &&
+        this.state.secondaryNumbers.indexOf(value) == -1
       ) {
         commit('SELECT_PRIMARY', value);
       }
@@ -41,7 +41,8 @@ export default new Vuex.Store({
     selectSecondary({ state, commit }, value: number) {
       if (
         this.state.secondaryNumbers.length < 1 &&
-        this.state.secondaryNumbers.indexOf(value) == -1
+        this.state.secondaryNumbers.indexOf(value) == -1 &&
+        this.state.primaryNumbers.indexOf(value) == -1
       ) {
         commit('SELECT_SECONDARY', value);
       }

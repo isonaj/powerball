@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const apiClient = new axios.create({
-  baseURL: 'https://data.api.thelott.com',
+const apiClient = axios.create({
+  baseURL: 'https://data.api.thelott.com/',
   withCredentials: false,
   headers: {
     Accept: 'application/json',
@@ -16,6 +16,6 @@ export default {
       MaxDrawCountPerProduct: 1,
       OptionalProductFilter: ['Powerball']
     };
-    return axios.post('/sales/vmax/web/data/lotto/latestresults', body);
+    return apiClient.post('/sales/vmax/web/data/lotto/latestresults', body);
   }
 };
